@@ -14,22 +14,6 @@ const db = mysql.createConnection({
 console.log(`Connected to the employees_db database.` .bgBlue)
 );
 
-// Connect to the DB
-// db.connect((err) => {
-//   if (err) throw err;   
-//   figlet.text('Employee  Tracker' , 
-//   {
-//       verticalLayout: 'full'  
-//   },
-//  (err, data) => {
-//     if (err) {
-//       console.log('logo not loaded');
-//     } else {
-//       console.log(data);
-//     }  
-//   });
-// });
-
 const longText = `
 Welcome to Employee Tracker. This  is a command-line application to manage 
 a company's employee database, using Node.js, Inquirer, and MySQL.`
@@ -51,14 +35,7 @@ db.connect((err) => {
     .right('version 1.0.0')
     .emptyLine()
     .center(longText)
-    .render(),
- (err, data) => {
-    if (err) {
-      console.log('logo not loaded');
-    } else {
-      // console.log(data);
-    }  
-  });
+    .render()) 
 });
 
 db.query = util.promisify(db.query);
