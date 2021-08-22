@@ -1,12 +1,13 @@
-//Include packages needed for this application
-const inquirer = require("inquirer");
-//https://www.npmjs.com/package/colors
-const colors = require('colors');
-
+const {main} = require('./src/queries')
 const validateEmail = require('email-validator');
-const consoleTable = require("console.table");
-const mysql = require('mysql2');
-const db = require('./config/connection')
+const {renderLogo} =  require ('./src/logo');
 
 
+
+function init() {  
+    renderLogo();
+    main();
+}
+
+init()
 

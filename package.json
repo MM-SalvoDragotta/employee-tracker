@@ -1,9 +1,10 @@
 {
   "name": "employee-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "1233",
   "main": "node index.js",
   "scripts": {
+    "start": "nodemon --no-stdin  index.js" ,
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
