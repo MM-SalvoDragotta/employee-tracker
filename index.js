@@ -8,6 +8,7 @@ const consoleTable = require("console.table");
 const mysql = require('mysql2');
 const figlet = require('figlet');
 require('dotenv').config();
+const util = require("util");
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -15,14 +16,17 @@ const db = mysql.createConnection({
     password: process.env.DB_PASS,
     database: process.env.DB_NAME  
   },
-  console.log(`Connected to the employees_db database.`)
+  console.log(`Connected to the employees_db database.` .bgBlue)
   );
 
 // Connect to the DB
 db.connect((err) => {
-    if (err) throw err;
-    console.log(`connected as id ${connection.threadId}\n`);
-    figlet('Employee tracker', function(err, data) {
+    if (err) throw err;   
+    figlet.text('Employee  Tracker' , 
+    {
+        verticalLayout: 'full'  
+    },
+   (err, data) => {
       if (err) {
         console.log('ascii art not loaded');
       } else {
@@ -31,3 +35,5 @@ db.connect((err) => {
     //   startPrompt();
     });
   });
+
+  db.query = util.promisify(db.query);
