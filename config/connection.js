@@ -6,9 +6,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME  
-},
-console.log(`Connected to the employees_db database.` .bgBlue)
-);
+});
 
 db.connect((err) => {
   if (err) throw err;

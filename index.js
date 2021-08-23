@@ -4,7 +4,8 @@ const {renderLogo} =  require ('./src/logo');
 
 
 
-function init() {  
+function init() { 
+    console.log(`Connected to the employees_db database.` .bgBlue) 
     renderLogo();
     main();
 }

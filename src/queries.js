@@ -5,7 +5,7 @@ const util = require("util");
 const inquirer = require("inquirer");
 //https://www.npmjs.com/package/colors
 const colors = require('colors');
-const {startQuestions} = require ('./questions')
+const {startQuestions} = require ('./questions');
 
 // node native promisify
 const query = util.promisify(db.query).bind(db);
@@ -23,7 +23,7 @@ async function main() {
             // updateEmployeeRole();
             break;
         case "View All Roles":
-            // viewAllRoles();
+            viewAllRoles();
             break;
         case "Add A Role":
             // addRole();
@@ -35,9 +35,9 @@ async function main() {
             // addDepartment();
             break;
         case "Exit":
-            console.log(`Disconnected from the employees_db database.` .bgBlue)
+            console.log(`Disconnected from the employees_db database.` .bgBlue);
             db.end();            
-            process.exit()
+            process.exit();
             break;
     }
 }
@@ -45,24 +45,43 @@ async function main() {
 async function viewAllEmployees() {
     try {
     const q = await query(`
-    SELECT 
-        employee.id, 
-        CONCAT (employee.first_name,' ', employee.last_name) AS 'Employee Name', 
-        role.title AS 'Role Title', 
-        department.name AS Department, 
-        role.salary AS Salary, 
-        CONCAT (managers.first_name,' ', managers.last_name) AS 'Manager Name'
+        SELECT 
+            employee.id, 
+            CONCAT (employee.first_name,' ', employee.last_name) AS 'Full Name', 
+            role.title AS 'Role', 
+            department.name AS Department, 
+            role.salary AS Salary, 
+            CONCAT (managers.first_name,' ', managers.last_name) AS 'Manager'
         FROM employee 
         INNER JOIN role ON (employee.role_id = role.id) 
         INNER JOIN department ON (department.id = role.department_id)
         LEFT JOIN employee AS managers ON (employee.manager_id = managers.id)
         ORDER BY employee.first_name ASC
-  `);   
+    `);   
     await console.table(q);
     main(); 
     } catch (err){
         console.log(err)
     }
+};
+
+async function viewAllRoles() {
+    try {
+        const q = await query(`
+        SELECT 
+            role.id, 
+            role.title AS 'Role',  
+            role.salary AS Salary, 
+            name AS Department
+        FROM role 
+        INNER JOIN department ON (role.department_id = department.id)
+        ORDER BY role.title ASC
+      `);   
+        await console.table(q);
+        main(); 
+        } catch (err){
+            console.log(err)
+        }
 };
 
 module.exports = {main};
