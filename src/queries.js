@@ -5,7 +5,7 @@ const util = require("util");
 const inquirer = require("inquirer");
 //https://www.npmjs.com/package/colors
 const colors = require('colors');
-const {startQuestions} = require ('./questions');
+const {startQuestions , addEmployeeQuestions} = require ('./questions');
 
 // node native promisify
 const query = util.promisify(db.query).bind(db);
@@ -17,7 +17,7 @@ async function main() {
             viewAllEmployees();
             break;
         case "Add Employee":
-            // addEmployee();
+            addEmployee();
             break;
         case "Update Employee Role":
             // updateEmployeeRole();
@@ -101,7 +101,33 @@ async function viewAllDepartments() {
 };
 
 async function addEmployee() {
-    
-}
+    try {
+        const managers = await query(`
+        SELECT 
+            id AS value, 
+            CONCAT(first_name, ' ', last_name) AS name        
+        FROM employee
+        ORDER BY employee.first_name ASC
+      `); 
+        const roles = await query(`
+        SELECT 
+            id AS value, 
+            title AS name        
+        FROM role
+        ORDER BY role.title ASC
+      `); 
+        roles.push(NaN)
+        // await console.table(roles);
+        // await console.table(managers);
+        const choice =  await inquirer.prompt(addEmployeeQuestions( roles , managers ));
+        await query(`
+        INSERT INTO employee SET ?                 
+      ` , choice);
+        await console.log(`${choice.first_name} ${choice.last_name} added successfully!` .bgGreen);
+        main(); 
+        } catch (err){
+            console.log(err)
+        }
+};
 
 module.exports = {main};
