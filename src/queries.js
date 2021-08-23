@@ -29,7 +29,7 @@ async function main() {
             // addRole();
             break;
         case "View All Departments":
-            // viewAllDepartments();
+            viewAllDepartments();
             break;
         case "Add Department":
             // addDepartment();
@@ -46,7 +46,7 @@ async function viewAllEmployees() {
     try {
     const q = await query(`
         SELECT 
-            employee.id, 
+            employee.id AS ID, 
             CONCAT (employee.first_name,' ', employee.last_name) AS 'Full Name', 
             role.title AS 'Role', 
             department.name AS Department, 
@@ -69,7 +69,7 @@ async function viewAllRoles() {
     try {
         const q = await query(`
         SELECT 
-            role.id, 
+            role.id AS ID, 
             role.title AS 'Role',  
             role.salary AS Salary, 
             name AS Department
@@ -83,5 +83,25 @@ async function viewAllRoles() {
             console.log(err)
         }
 };
+
+async function viewAllDepartments() {
+    try {
+        const q = await query(`
+        SELECT 
+            department.id AS ID, 
+            department.name AS Department
+        FROM department         
+        ORDER BY department.name ASC
+      `);   
+        await console.table(q);
+        main(); 
+        } catch (err){
+            console.log(err)
+        }
+};
+
+async function addEmployee() {
+    
+}
 
 module.exports = {main};
