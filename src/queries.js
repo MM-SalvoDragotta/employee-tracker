@@ -109,6 +109,7 @@ async function addEmployee() {
         FROM employee
         ORDER BY employee.first_name ASC
       `); 
+        managers.push("None")
         const roles = await query(`
         SELECT 
             id AS value, 
@@ -116,18 +117,21 @@ async function addEmployee() {
         FROM role
         ORDER BY role.title ASC
       `); 
-        roles.push(NaN)
+        
         // await console.table(roles);
         // await console.table(managers);
         const choice =  await inquirer.prompt(addEmployeeQuestions( roles , managers ));
+        if (choice.manager_id ==="None") {
+            choice.manager_id = null;
+        }
         await query(`
         INSERT INTO employee SET ?                 
       ` , choice);
         await console.log(`${choice.first_name} ${choice.last_name} added successfully!` .bgGreen);
         main(); 
-        } catch (err){
-            console.log(err)
-        }
+    } catch (err){
+        console.log(err)
+    }
 };
 
 module.exports = {main};
