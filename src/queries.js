@@ -3,10 +3,8 @@ const cTable = require('console.table');
 const util = require("util");
 //Include packages needed for this application
 const inquirer = require("inquirer");
-//https://www.npmjs.com/package/colors
-const colors = require('colors');
-const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions} = require ('./questions');
-const Choices = require('inquirer/lib/objects/choices');
+const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions , addDepartmentQuestions} = require ('./questions');
+// const Choices = require('inquirer/lib/objects/choices');
 var clear = require("cli-clear");
 const {renderLogo} =  require ('./logo');
 
@@ -42,7 +40,7 @@ async function main() {
             viewAllDepartments();
             break;
         case "Add Department":
-            // addDepartment();
+            addDepartment();
             break;
         case "Exit":
             console.log(`Disconnected from the employees_db database.` .bgBlue);
@@ -104,9 +102,7 @@ async function viewAllDepartments() {
             ORDER BY department.name ASC
       `);   
         await console.table(q);
-        await renderLogo();
-        await main(); 
-        clear(); 
+        refresh();  
         } catch (err){
             console.log(err)
         }
@@ -215,6 +211,24 @@ async function addRole() {
     } catch (err){
         console.log(err)
     }                   
+}
+
+async function addDepartment(){
+    try {
+        const choice =  await inquirer.prompt(addDepartmentQuestions);         
+        await query(`
+            INSERT INTO department SET ?               
+            ` ,  {
+                    name: choice.name                   
+                }          
+            );
+        await console.log(`Department "${choice.name}" added successfully!` .bgGreen);
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await clear(); 
+        refresh(); 
+    } catch (err){
+        console.log(err)
+    }              
 }
 
 module.exports = {main};
