@@ -5,9 +5,11 @@ const util = require("util");
 const inquirer = require("inquirer");
 //https://www.npmjs.com/package/colors
 const colors = require('colors');
-const {startQuestions , addEmployeeQuestions} = require ('./questions');
+const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions} = require ('./questions');
+const Choices = require('inquirer/lib/objects/choices');
 
 // node native promisify
+//https://stackoverflow.com/questions/56242450/use-async-with-nodejs-mysql-driver
 const query = util.promisify(db.query).bind(db);
 
 async function main() {
@@ -20,7 +22,7 @@ async function main() {
             addEmployee();
             break;
         case "Update Employee Role":
-            // updateEmployeeRole();
+            updateEmployeeRole();
             break;
         case "View All Roles":
             viewAllRoles();
@@ -109,7 +111,8 @@ async function addEmployee() {
         FROM employee
         ORDER BY employee.first_name ASC
       `); 
-        managers.push("None")
+        managers.push(">>>None<<<")
+
         const roles = await query(`
         SELECT 
             id AS value, 
@@ -121,17 +124,58 @@ async function addEmployee() {
         // await console.table(roles);
         // await console.table(managers);
         const choice =  await inquirer.prompt(addEmployeeQuestions( roles , managers ));
-        if (choice.manager_id ==="None") {
+        if (choice.manager_id === ">>>None<<<") {
             choice.manager_id = null;
         }
+        // console.log(choice)
         await query(`
         INSERT INTO employee SET ?                 
       ` , choice);
-        await console.log(`${choice.first_name} ${choice.last_name} added successfully!` .bgGreen);
+        await console.log(`New employee ${choice.first_name} ${choice.last_name} added successfully!` .bgGreen);
         main(); 
     } catch (err){
         console.log(err)
     }
 };
+
+async function updateEmployeeRole() {
+    try {
+        const employees = await query(`
+        SELECT 
+            employee.id AS value, 
+            CONCAT(first_name, ' ', last_name) AS name,
+            role.title AS 'Role'     
+        FROM employee
+        INNER JOIN role ON (employee.role_id = role.id) 
+        ORDER BY employee.first_name ASC
+      `);         
+        // await console.table(employees);
+        const roles = await query(`
+        SELECT 
+            id AS value, 
+            title AS name        
+        FROM role
+        ORDER BY role.title ASC
+      `); 
+        
+        const choice =  await inquirer.prompt(updateEmployeeRoleQuestions( employees , roles ));   
+        // console.log(choice)
+        await query(`
+        UPDATE employee SET ? WHERE ?                
+      ` , [ {
+            role_id : choice.role_id 
+            },
+            {                
+            id :choice.id  
+            }          
+        ]);
+        await console.log(`Employee Role updated successfully!` .bgGreen);
+        main(); 
+    } catch (err){
+        console.log(err)
+    }
+};
+
+
 
 module.exports = {main};
