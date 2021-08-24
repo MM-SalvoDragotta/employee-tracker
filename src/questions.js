@@ -63,5 +63,25 @@ const updateEmployeeRoleQuestions =  (employees , roles) =>  [
     }   
 ];
 
+const addRoleQuestions =  (department) =>  [
+    {
+    type: "input",
+    message: "What is the new role Title?" .brightMagenta,
+    name: "title",    
+    },
+    {
+        type: "input",
+        message: "What is the new role Salary?",
+        name: "salary",
+    },
+    {
+    type: "list",
+    message: "What is the new role Department?" .brightMagenta,
+    name: "department_id",
+    choices: department,
+    pageSize: 15
+    }   
+];
 
-module.exports = {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions};
+
+module.exports = {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions , addRoleQuestions};

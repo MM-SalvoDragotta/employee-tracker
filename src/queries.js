@@ -5,7 +5,7 @@ const util = require("util");
 const inquirer = require("inquirer");
 //https://www.npmjs.com/package/colors
 const colors = require('colors');
-const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions} = require ('./questions');
+const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions} = require ('./questions');
 const Choices = require('inquirer/lib/objects/choices');
 var clear = require("cli-clear");
 const {renderLogo} =  require ('./logo');
@@ -78,14 +78,14 @@ async function viewAllEmployees() {
 async function viewAllRoles() {
     try {
         const q = await query(`
-        SELECT 
-            role.id AS ID, 
-            role.title AS 'Role',  
-            role.salary AS Salary, 
-            name AS Department
-        FROM role 
-        INNER JOIN department ON (role.department_id = department.id)
-        ORDER BY role.title ASC
+            SELECT 
+                role.id AS ID, 
+                role.title AS 'Role',  
+                role.salary AS Salary, 
+                name AS Department
+            FROM role 
+            INNER JOIN department ON (role.department_id = department.id)
+            ORDER BY role.title ASC
       `);   
         await console.table(q);
         refresh();         
@@ -97,11 +97,11 @@ async function viewAllRoles() {
 async function viewAllDepartments() {
     try {
         const q = await query(`
-        SELECT 
-            department.id AS ID, 
-            department.name AS Department
-        FROM department         
-        ORDER BY department.name ASC
+            SELECT 
+                department.id AS ID, 
+                department.name AS Department
+            FROM department         
+            ORDER BY department.name ASC
       `);   
         await console.table(q);
         await renderLogo();
@@ -116,20 +116,20 @@ async function addEmployee() {
     await renderLogo();
     try {
         const managers = await query(`
-        SELECT 
-            id AS value, 
-            CONCAT(first_name, ' ', last_name) AS name        
-        FROM employee
-        ORDER BY employee.first_name ASC
+            SELECT 
+                id AS value, 
+                CONCAT(first_name, ' ', last_name) AS name        
+            FROM employee
+            ORDER BY employee.first_name ASC
       `); 
         managers.push(">>>None<<<")
 
         const roles = await query(`
-        SELECT 
-            id AS value, 
-            title AS name        
-        FROM role
-        ORDER BY role.title ASC
+            SELECT 
+                id AS value, 
+                title AS name        
+            FROM role
+            ORDER BY role.title ASC
       `); 
         
         // await console.table(roles);
@@ -154,27 +154,27 @@ async function addEmployee() {
 async function updateEmployeeRole() {
     try {
         const employees = await query(`
-        SELECT 
-            employee.id AS value, 
-            CONCAT(first_name, ' ', last_name , ' -  CURRENT ROLE: ', role.title ) AS name, 
-            role.title AS 'Role'     
-        FROM employee
-        INNER JOIN role ON (employee.role_id = role.id) 
-        ORDER BY employee.first_name ASC
+            SELECT 
+                employee.id AS value, 
+                CONCAT(first_name, ' ', last_name , ' -  CURRENT ROLE: ', role.title ) AS name, 
+                role.title AS 'Role'     
+            FROM employee
+            INNER JOIN role ON (employee.role_id = role.id) 
+            ORDER BY employee.first_name ASC
       `);         
         // await console.table(employees);
         const roles = await query(`
-        SELECT 
-            id AS value, 
-            title AS name        
-        FROM role
-        ORDER BY role.title ASC
+            SELECT 
+                id AS value, 
+                title AS name        
+            FROM role
+            ORDER BY role.title ASC
       `); 
         
         const choice =  await inquirer.prompt(updateEmployeeRoleQuestions( employees , roles ));   
         // console.log(choice)
         await query(`
-        UPDATE employee SET ? WHERE ?                
+            UPDATE employee SET ? WHERE ?                
       ` , [ {
             role_id : choice.role_id 
             },
@@ -192,7 +192,29 @@ async function updateEmployeeRole() {
 }
 
 async function addRole() {
-
+    try {
+        const departments = await query(`
+            SELECT 
+                id AS value, 
+                name       
+            FROM department    
+        `);
+        const choice =  await inquirer.prompt(addRoleQuestions(departments)); 
+        await query(`
+            INSERT INTO role SET ?                
+            ` ,  {
+                    title: choice.title,
+                    salary: choice.salary,
+                    department_id: choice.department_id  
+                    }          
+                );
+        await console.log(`New Role added successfully!` .bgGreen);
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await clear(); 
+        refresh(); 
+    } catch (err){
+        console.log(err)
+    }                   
 }
 
 module.exports = {main};
