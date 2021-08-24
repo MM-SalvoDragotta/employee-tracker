@@ -7,10 +7,18 @@ const inquirer = require("inquirer");
 const colors = require('colors');
 const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions} = require ('./questions');
 const Choices = require('inquirer/lib/objects/choices');
+var clear = require("cli-clear");
+const {renderLogo} =  require ('./logo');
 
 // node native promisify
 //https://stackoverflow.com/questions/56242450/use-async-with-nodejs-mysql-driver
 const query = util.promisify(db.query).bind(db);
+
+async function refresh(){
+    await renderLogo();
+    await main();         
+    clear();      
+}
 
 async function main() {
     const choice =  await inquirer.prompt(startQuestions);
@@ -61,7 +69,7 @@ async function viewAllEmployees() {
         ORDER BY employee.first_name ASC
     `);   
     await console.table(q);
-    main(); 
+    refresh(); 
     } catch (err){
         console.log(err)
     }
@@ -80,7 +88,7 @@ async function viewAllRoles() {
         ORDER BY role.title ASC
       `);   
         await console.table(q);
-        main(); 
+        refresh();         
         } catch (err){
             console.log(err)
         }
@@ -96,7 +104,9 @@ async function viewAllDepartments() {
         ORDER BY department.name ASC
       `);   
         await console.table(q);
-        main(); 
+        await renderLogo();
+        await main(); 
+        clear(); 
         } catch (err){
             console.log(err)
         }
@@ -132,7 +142,7 @@ async function addEmployee() {
         INSERT INTO employee SET ?                 
       ` , choice);
         await console.log(`New employee ${choice.first_name} ${choice.last_name} added successfully!` .bgGreen);
-        main(); 
+        refresh(); 
     } catch (err){
         console.log(err)
     }
@@ -143,7 +153,7 @@ async function updateEmployeeRole() {
         const employees = await query(`
         SELECT 
             employee.id AS value, 
-            CONCAT(first_name, ' ', last_name) AS name,
+            CONCAT(first_name, ' ', last_name , ' -  CURRENT ROLE: ', role.title ) AS name, 
             role.title AS 'Role'     
         FROM employee
         INNER JOIN role ON (employee.role_id = role.id) 
@@ -170,7 +180,7 @@ async function updateEmployeeRole() {
             }          
         ]);
         await console.log(`Employee Role updated successfully!` .bgGreen);
-        main(); 
+        refresh(); 
     } catch (err){
         console.log(err)
     }
