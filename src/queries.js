@@ -16,7 +16,7 @@ const query = util.promisify(db.query).bind(db);
 
 async function refresh(){
     await renderLogo();
-    await main();         
+    await main();           
     clear();      
 }
 
@@ -36,7 +36,7 @@ async function main() {
             viewAllRoles();
             break;
         case "Add A Role":
-            // addRole();
+            addRole();
             break;
         case "View All Departments":
             viewAllDepartments();
@@ -73,7 +73,7 @@ async function viewAllEmployees() {
     } catch (err){
         console.log(err)
     }
-};
+}
 
 async function viewAllRoles() {
     try {
@@ -92,7 +92,7 @@ async function viewAllRoles() {
         } catch (err){
             console.log(err)
         }
-};
+}
 
 async function viewAllDepartments() {
     try {
@@ -110,9 +110,10 @@ async function viewAllDepartments() {
         } catch (err){
             console.log(err)
         }
-};
+}
 
 async function addEmployee() {
+    await renderLogo();
     try {
         const managers = await query(`
         SELECT 
@@ -142,11 +143,13 @@ async function addEmployee() {
         INSERT INTO employee SET ?                 
       ` , choice);
         await console.log(`New employee ${choice.first_name} ${choice.last_name} added successfully!` .bgGreen);
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await clear(); 
         refresh(); 
     } catch (err){
         console.log(err)
     }
-};
+}
 
 async function updateEmployeeRole() {
     try {
@@ -180,12 +183,16 @@ async function updateEmployeeRole() {
             }          
         ]);
         await console.log(`Employee Role updated successfully!` .bgGreen);
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await clear(); 
         refresh(); 
     } catch (err){
         console.log(err)
     }
-};
+}
 
+async function addRole() {
 
+}
 
 module.exports = {main};
