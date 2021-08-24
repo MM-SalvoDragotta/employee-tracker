@@ -3,7 +3,7 @@ const cTable = require('console.table');
 const util = require("util");
 //Include packages needed for this application
 const inquirer = require("inquirer");
-const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions , addDepartmentQuestions, deleteEmployeeQuestions, deleteRoleQuestions} = require ('./questions');
+const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions , addDepartmentQuestions, deleteEmployeeQuestions, deleteRoleQuestions , deleteDepartmentQuestions} = require ('./questions');
 // const Choices = require('inquirer/lib/objects/choices');
 var clear = require("cli-clear");
 const {renderLogo} =  require ('./logo');
@@ -47,7 +47,10 @@ async function main() {
             break;
         case "Delete Role":    
             deleteRole()
-            break;      
+            break;
+        case "Delete Department":    
+            deleteDepartment()
+            break;        
         case "Exit":
             console.log(`Disconnected from the employees_db database.` .bgBlue);
             db.end();            
@@ -285,4 +288,29 @@ async function deleteRole() {
         console.log(err)
     }                   
 }
+
+async function deleteDepartment() {
+    try {
+        const departments = await query(`
+            SELECT 
+                id AS value, 
+                name     
+            FROM department    
+        `);
+        const choice =  await inquirer.prompt(deleteDepartmentQuestions(departments)); 
+        await query(`
+            DELETE FROM department WHERE ?              
+        ` ,  {
+                id: choice.id                  
+            }          
+        );
+        await console.log(`Departments removed successfully!` .bgGreen);
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await clear(); 
+        refresh(); 
+    } catch (err){
+        console.log(err)
+    }                   
+}
+
 module.exports = {main};

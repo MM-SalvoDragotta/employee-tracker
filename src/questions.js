@@ -14,7 +14,8 @@ const startQuestions = [
         'View All Departments',        
         'Add Department',
         'Delete Employee', 
-        'Delete Role',     
+        'Delete Role', 
+        'Delete Department',   
         'Exit'
     ],
     pageSize: 12,
@@ -93,7 +94,7 @@ const addDepartmentQuestions = [
     }
 ];
 
-const deleteEmployeeQuestions =  (employees)=>  [
+const deleteEmployeeQuestions =  employees=>  [
     {
     type: "rawlist",
     message: "Select employee to be removed" .brightMagenta,
@@ -103,7 +104,7 @@ const deleteEmployeeQuestions =  (employees)=>  [
     }   
 ];
 
-const deleteRoleQuestions =  (roles)=>  [
+const deleteRoleQuestions =  roles=>  [
     {
     type: "rawlist",
     message: "Select role to be removed" .brightMagenta,
@@ -113,4 +114,14 @@ const deleteRoleQuestions =  (roles)=>  [
     }   
 ];
 
-module.exports = {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions , addRoleQuestions , addDepartmentQuestions , deleteEmployeeQuestions , deleteRoleQuestions};
+const deleteDepartmentQuestions =  departments =>  [
+    {
+    type: "rawlist",
+    message: "Select department to be removed" .brightMagenta,
+    name: "id",
+    choices: departments,
+    pageSize: 50
+    }   
+];
+
+module.exports = {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions , addRoleQuestions , addDepartmentQuestions , deleteEmployeeQuestions , deleteRoleQuestions, deleteDepartmentQuestions};
