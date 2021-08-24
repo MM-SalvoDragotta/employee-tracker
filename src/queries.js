@@ -3,7 +3,7 @@ const cTable = require('console.table');
 const util = require("util");
 //Include packages needed for this application
 const inquirer = require("inquirer");
-const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions , addDepartmentQuestions} = require ('./questions');
+const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions , addDepartmentQuestions, deleteEmployeeQuestions, deleteRoleQuestions} = require ('./questions');
 // const Choices = require('inquirer/lib/objects/choices');
 var clear = require("cli-clear");
 const {renderLogo} =  require ('./logo');
@@ -42,6 +42,12 @@ async function main() {
         case "Add Department":
             addDepartment();
             break;
+        case "Delete Employee":
+            deleteEmployee();
+            break;
+        case "Delete Role":    
+            deleteRole()
+            break;      
         case "Exit":
             console.log(`Disconnected from the employees_db database.` .bgBlue);
             db.end();            
@@ -231,4 +237,52 @@ async function addDepartment(){
     }              
 }
 
+async function deleteEmployee(){
+    try {                
+        const employees = await query(`
+            SELECT 
+                id AS value, 
+                CONCAT(first_name, ' ', last_name) AS name        
+            FROM employee
+            ORDER BY employee.first_name ASC            
+            `);
+        const choice =  await inquirer.prompt(deleteEmployeeQuestions(employees));
+        await query(`
+            DELETE FROM employee WHERE ?              
+            ` ,  {
+                    id: choice.id                  
+                }          
+            );    
+        await console.log(`Employee removed successfully!` .bgGreen);
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await clear(); 
+        refresh(); 
+    } catch (err){
+        console.log(err)
+    }  
+}
+
+async function deleteRole() {
+    try {
+        const roles = await query(`
+            SELECT 
+                id AS value, 
+                CONCAT(title, ' - SALARY: ', salary) AS name      
+            FROM role    
+        `);
+        const choice =  await inquirer.prompt(deleteRoleQuestions(roles)); 
+        await query(`
+            DELETE FROM role WHERE ?              
+        ` ,  {
+                id: choice.id                  
+            }          
+        );
+        await console.log(`Role removed successfully!` .bgGreen);
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        await clear(); 
+        refresh(); 
+    } catch (err){
+        console.log(err)
+    }                   
+}
 module.exports = {main};

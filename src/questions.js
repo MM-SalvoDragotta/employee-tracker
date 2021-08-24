@@ -12,7 +12,9 @@ const startQuestions = [
         'View All Roles',
         'Add A Role',        
         'View All Departments',        
-        'Add Department',       
+        'Add Department',
+        'Delete Employee', 
+        'Delete Role',     
         'Exit'
     ],
     pageSize: 12,
@@ -70,9 +72,9 @@ const addRoleQuestions =  department =>  [
     name: "title",    
     },
     {
-        type: "input",
-        message: "What is the new role Salary?",
-        name: "salary",
+    type: "input",
+    message: "What is the new role Salary?",
+    name: "salary",
     },
     {
     type: "list",
@@ -91,5 +93,24 @@ const addDepartmentQuestions = [
     }
 ];
 
+const deleteEmployeeQuestions =  (employees)=>  [
+    {
+    type: "rawlist",
+    message: "Select employee to be removed" .brightMagenta,
+    name: "id",
+    choices: employees,
+    pageSize: 50
+    }   
+];
 
-module.exports = {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions , addRoleQuestions , addDepartmentQuestions};
+const deleteRoleQuestions =  (roles)=>  [
+    {
+    type: "rawlist",
+    message: "Select role to be removed" .brightMagenta,
+    name: "id",
+    choices: roles,
+    pageSize: 50
+    }   
+];
+
+module.exports = {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions , addRoleQuestions , addDepartmentQuestions , deleteEmployeeQuestions , deleteRoleQuestions};
