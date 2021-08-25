@@ -3,7 +3,16 @@ const cTable = require('console.table');
 const util = require("util");
 //Include packages needed for this application
 const inquirer = require("inquirer");
-const {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions, addRoleQuestions , addDepartmentQuestions, deleteEmployeeQuestions, deleteRoleQuestions , deleteDepartmentQuestions} = require ('./questions');
+const {
+    startQuestions , 
+    addEmployeeQuestions , 
+    updateEmployeeRoleQuestions, 
+    addRoleQuestions , 
+    addDepartmentQuestions, 
+    deleteEmployeeQuestions, 
+    deleteRoleQuestions , 
+    deleteDepartmentQuestions
+} = require ('./questions');
 // const Choices = require('inquirer/lib/objects/choices');
 var clear = require("cli-clear");
 const {renderLogo} =  require ('./logo');

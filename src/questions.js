@@ -94,7 +94,7 @@ const addDepartmentQuestions = [
     }
 ];
 
-const deleteEmployeeQuestions =  employees=>  [
+const deleteEmployeeQuestions =  employees =>  [
     {
     type: "rawlist",
     message: "Select employee to be removed" .brightMagenta,
@@ -104,7 +104,7 @@ const deleteEmployeeQuestions =  employees=>  [
     }   
 ];
 
-const deleteRoleQuestions =  roles=>  [
+const deleteRoleQuestions =  roles =>  [
     {
     type: "rawlist",
     message: "Select role to be removed" .brightMagenta,
@@ -124,4 +124,13 @@ const deleteDepartmentQuestions =  departments =>  [
     }   
 ];
 
-module.exports = {startQuestions , addEmployeeQuestions , updateEmployeeRoleQuestions , addRoleQuestions , addDepartmentQuestions , deleteEmployeeQuestions , deleteRoleQuestions, deleteDepartmentQuestions};
+module.exports = {
+    startQuestions ,
+    addEmployeeQuestions , 
+    updateEmployeeRoleQuestions , 
+    addRoleQuestions , 
+    addDepartmentQuestions , 
+    deleteEmployeeQuestions , 
+    deleteRoleQuestions, 
+    deleteDepartmentQuestions
+};
