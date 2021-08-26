@@ -1,6 +1,8 @@
 //https://www.npmjs.com/package/colors
 const colors = require('colors');
 
+const validation = require ('./validation')
+
 const startQuestions = [
     {
     type: 'rawlist',
@@ -27,25 +29,27 @@ const addEmployeeQuestions =  (roles, managers) =>  [
     type: "input",
     message: "Employee's first name?" .brightMagenta,
     name: "first_name",
+    validate: validation.validateValue
     },
     {
     type: "input",
     message: "Employee's last name?" .brightMagenta,
     name: "last_name",
+    validate: validation.validateValue
     },
     {
     type: "list",
     message: "Employee's role?" .brightMagenta,
     name: "role_id",
     choices: roles,
-    pageSize: 15
+    pageSize: 15    
     },
     {
     type: "list",
     message: "Employee's manager?" .brightMagenta,
     name: "manager_id",
     choices: managers,
-    pageSize: 50
+    pageSize: 50    
     }
 ];
 
@@ -70,12 +74,14 @@ const addRoleQuestions =  department =>  [
     {
     type: "input",
     message: "What is the new role Title?" .brightMagenta,
-    name: "title",    
+    name: "title",
+    validate: validation.validateValue    
     },
     {
     type: "input",
     message: "What is the new role Salary?",
     name: "salary",
+    validate: validation.validateSalary
     },
     {
     type: "list",
@@ -91,6 +97,7 @@ const addDepartmentQuestions = [
         type: "input",
         message: "What is the name of the new department?",
         name: "name",
+        validate: validation.validateValue
     }
 ];
 
