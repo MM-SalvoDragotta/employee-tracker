@@ -127,6 +127,7 @@ async function viewAllDepartments() {
 }
 
 async function addEmployee() {
+    
     await clear();
     try {
         const managers = await query(`
