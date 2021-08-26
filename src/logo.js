@@ -1,7 +1,7 @@
 const logo = require('asciiart-logo');
 
 const longText = `
-Welcome to Employee Tracker. This  is a command-line application to manage 
+Welcome to the Employee Tracker. This  is a command-line application to manage 
 a company's employee database, using Node.js, Inquirer, and MySQL.`
 
 function renderLogo() {

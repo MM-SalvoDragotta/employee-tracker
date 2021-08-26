@@ -6,7 +6,7 @@ const validation = {
         if (value && validator.isAlpha(value)) {
             return true;
         } else { 
-            return "Please enter a valid value. It cannot be empty or contains numbers" .red;
+            return "Please enter a valid value. It cannot be empty or contain numbers" .red;
         }
     }, 
     validateSalary (value){
