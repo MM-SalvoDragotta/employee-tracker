@@ -62,7 +62,7 @@ Run the following command at the root of your project.
 
 `node index.js` or `npm start`
 
-🎥  A video of the typical user flow through the application can be found here [Employee Tracker](./dist/EmployeeTracker.mp4) 
+🎥  A video of the typical user flow through the application can be found here [Employee Tracker](https://drive.google.com/file/d/1ganLHjwyPD1hb41hlS-3ATArDjgSH7so/view?usp=sharing) 
 
 Also refer to the following screenshots
 
