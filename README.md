@@ -28,7 +28,7 @@
 
 ## Description
 
-This is a command-line application to manage a company's employee database, using Node.js, [Inquirer package](https://www.npmjs.com/package/inquirer), and [MySQL] (https://dev.mysql.com/downloads/mysql/). A list of prompts allow users to update and manipulate the employee database.
+This is a command-line application to manage a company's employee database, using Node.js, [Inquirer package](https://www.npmjs.com/package/inquirer), and [MySQL](https://dev.mysql.com/downloads/mysql/). A list of prompts allow users to update and manipulate the employee database.
 
 The following animation shows the Employee Tracker appearance and functionality:
 
