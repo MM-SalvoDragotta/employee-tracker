@@ -84,7 +84,7 @@ This App is covered by the \
 ## Contributing
 
 Fork this repository if you want to contribute\
-[![GitHub forks](https://img.shields.io/github/forks/MM-SalvoDragotta/team-profile-generator?style=social)](https://github.com/MM-SalvoDragotta/team-profile-generator/fork)
+[![GitHub forks](https://img.shields.io/github/forks/MM-SalvoDragotta/team-profile-generator?style=social)](https://github.com/MM-SalvoDragotta/employee-tracker/fork)
 
 ----
 
